@@ -24,6 +24,7 @@ public class NoticeService {
 	public List<Notice> getList(int offset) throws ClassNotFoundException, SQLException {
 		
 		String sql = "SELECT * FROM notice ORDER BY regdate DESC LIMIT 10 OFFSET ?";
+		
 		List<Notice> list = new ArrayList<>();
 		
 		Class.forName(dbDriver);
@@ -47,6 +48,26 @@ public class NoticeService {
 		
 		return list;
 	}
+	
+	public int getCount() throws SQLException {
+		
+			int count = 0;
+			String sql = "SELECT COUNT(*) AS C FROM notice";
+			
+			Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery(sql);
+			
+			if(rs.next()) {
+			   count = rs.getInt("C");
+			}
+			
+			rs.close();
+			st.close();
+			con.close();
+			
+			return count;
+		}
 	
 	public String insertNotice(Notice notice) throws SQLException {
 		
